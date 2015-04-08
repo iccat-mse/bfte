@@ -1,0 +1,221 @@
+---
+title: "Evaluation of an Emprirical MP"
+subtitle: "Conditioning of the Operating Model"
+author: "Laurence Kell"
+date: "21/03/2015"
+output: html_document
+---
+    
+# Operating Model
+## Scenarios
+
+Scenarios used for the OM were based on the 2014 stock assessment and the cross-validation (**Figure** 1). Due to the lack of convergence in the VPA and the changes catchability and relative fishing mortality-at-age in due to management in recent years the series was tuncated to end in 2008. 
+
+A sequential t-test algorithm  (STARS;  rodionov, 2004 as modified by Szuwalski et al., 2014) was used to identify regime shifts in recruitment (**Figure** 2). The OM was conditioned so that mass, m, proportion mature and selectivity-at-age from 2009 onwards was the average from years 2006 to 2008  (**Figure** 3 shows the corresponding equilibrium curves). Recruitment in the most recent regime (1999 onwards) was given by the estimates from STARS (**Figure** 4). 
+
+70% of FMSY is often cited as a target F. Although it will be impossible to implement in practice it does provide a basis for comparison, i.e. a counterfacual run against which simulation trials can be compared. Therefore all scenarios were projected from 2009 to 2050 for an F of 70% of FMSY (**Figure** 5). 
+
+
+# Management Procedure
+
+An empirical MP has already been run (SCRS2014-36). The issues are
+
+* Do we also want to run a VPA MP?
+* What goes in the observation error model? I was going to use the cross-validation paper to propose CPUE time series, then propose some aerial survey time series with a range of CVs due to measurement and process error.
+* What about CAA? the VPA is based on age slicing which we know is biased. Do we ignore this or include ageing error in the conditioning of the OM?
+
+
+
+# Figures
+
+```{r, echo=FALSE}
+library(knitr)
+
+opts_chunk$set(comment   =NA, 
+               fig.width =5.5, 
+               fig.height=6,
+               fig.path  ="../tex/",
+               warning   =FALSE, 
+               message   =FALSE, 
+               error     =FALSE, 
+               echo      =FALSE, 
+               eval      =TRUE,
+               cache     =TRUE)
+```
+
+```{r, echo=FALSE}
+library(FLCore)
+library(FLBRP)
+library(plyr)
+library(ggplotFL)
+library(biodyn)
+
+dirInp="/home/laurie/Desktop/Dropbox/collaboration/crossvalidation/inputs"
+dirDat="/home/laurie/MEGAsync/empirical/data"
+
+run   =c("run52013","run142013","run152013","run5JP2013",
+         "run5new2013","run5westM2013","run5inflate2013")
+
+oms=FLStocks(mlply(paste(dirInp,run,"med/bfte2014.c1",sep="/"),readVPA2Box))
+oms=FLStocks(llply(oms,window,end=2008))
+oms=FLStocks(llply(oms,function(x){
+       stock.n(x)    =stock.n(x)/1000
+       catch.n(x)    =catch.n(x)/1000
+       landings.n(x) =landings.n(x)/1000
+       discards.n(x) =discards.n(x)/1000
+
+       stock.wt(x)   =stock.wt(x)/1000
+       catch.wt(x)   =catch.wt(x)/1000
+       landings.wt(x)=landings.wt(x)/1000
+       discards.wt(x)=discards.wt(x)/1000
+
+       catch(x)      =computeCatch(x)   
+       stock(x)      =computeStock(x)  
+       
+       units(stock(      x))="1000 tonnes"
+       units(catch(      x))="1000 tonnes"
+       units(stock.wt(   x))="tonnes"
+       units(catch.wt(   x))="tonnes"
+       units(landings.wt(x))="tonnes"
+       units(discards.wt(x))="tonnes"
+       
+       units(stock.n(   x))="1000s"
+       units(catch.n(   x))="1000s"
+       units(landings.n(x))="1000s"
+       units(discards.n(x))="1000s"
+       
+       x}))
+
+names(oms)=run
+```
+
+```{rom, echo=FALSE}
+plot(oms)+
+  kobe:::theme_ms(legend.position="bottom")+
+  ylab("Year")
+```
+
+**Figure 1** Time series of recruitment, SSB, catch and fishing mortality by scenario.
+
+
+```{r, echo=FALSE}
+eql=FLBRPs(llply(oms,function(x){brp(FLBRP(x))}))
+names(eql)=run
+
+srs=FLSRs( llply(oms,function(x){as.FLSR(x,model="bevholt")}))
+names(srs)=run
+```
+
+```{rts, echo=FALSE}
+p=plot(FLQuants(llply(srs,rec)))+
+  facet_wrap(~qname,ncol=2)+
+  theme_bw(8)
+names(p$data)[6]=".id"
+
+stars=ldply(srs,function(x) {
+              dat=as.data.frame(rec(iter(x,1)))
+              biodyn:::rod(dat$data,dat$year,FALSE)})
+
+pg=ddply(stars,.(.id,i),
+         function(dat) data.frame(i=dat$i,
+                                  x=with(dat,c(minyear,minyear,maxyear,maxyear)),
+                                  y=with(dat,c(mn+sd,  mn-sd,  mn-sd,  mn+sd))))
+
+# ggplot(ldply(srs, function(x) as.data.frame(rec(iter(x,1)),drop=T)))+
+#   geom_path( aes(year,data))+
+p+
+  #  scale_x_continuous(breaks=seq(0,3000,10)) +
+  #  scale_y_continuous(breaks=c(0,5,10)) +
+  facet_wrap(~.id,scale="free_y",ncol=2) +
+  ylab("Recruits") + xlab("Year") +
+  kobe:::theme_ms(8, legend.position="none",axis.title=element_text(size=10, vjust=0.5))+
+  geom_polygon(aes(x,y,group=paste(i,.id)),data=pg,alpha=.2,fill="lavender",col="blue")+
+  xlab("Recruitment (1000s)")+ylab("Year")
+```
+
+**Figure 2** Time series of recruitment with regimes estimated by STARS algorithm by scenario
+
+```{rstars, echo=FALSE}
+srpar=merge(stars,ddply(stars,.(.id),with, max(as.numeric(i))))
+srpar=srpar[srpar$i==srpar$V1,c(".id","mn","sd","minyear","maxyear")]
+spr0=ldply(eql, function(x) as.data.frame(spr0(iter(x,1)),drop=T))
+srpar=merge(srpar,spr0)
+names(srpar)[6]="spr0"
+srpar=transform(srpar,v=spr0*mn,s=0.9)
+srpar=merge(srpar,
+            ddply(srpar,.(.id), with, 
+            model.frame(ab(FLPar(s=s,v=v),"bevholt",spr0)[c("a","b")]))[,-4])
+
+## gamma, estimate rate and shape
+fn1=function(mn,sd){
+  rate =mn/sd^2
+  shape=(sd*rate)^2
+  c(rate=rate,shape=shape)}
+
+fn2=function(shape,rate){
+  mn=shape/rate
+  sd=shape^0.5/rate
+  c(mn=mn,sd=sd)}
+
+srpar=merge(srpar,
+            ddply(srpar,.(.id), with, 
+            fn1(mn,sd)))
+
+srDev=dlply(srpar,.(.id), with, FLQuant(rgamma(500*62,shape,rate),
+                                  dimnames=list(year=1989:2050,iter=1:500))/mn)
+names(srDev)=run
+
+for(i in 1:7){
+  model( eql[[i]])=bevholt()$model
+  params(eql[[i]])=FLPar(unlist(srpar[i,c("a","b")]))
+  eql[[i]]=brp(eql[[i]])
+  }
+
+save(eql,  file="/home/laurie/MEGAsync/empirical/data/eql.RData")
+save(srpar,file="/home/laurie/MEGAsync/empirical/data/srpar.RData")
+save(srDev,file="/home/laurie/MEGAsync/empirical/data/srDev.RData")
+
+plot(FLBRPs(llply(eql,function(x) iter(x,1))),refpts=FALSE)+
+  kobe:::theme_ms(legend.position="bottom")+
+  xlab("")+ylab("")
+```
+
+**Figure 3** Equilibrium curves by scenario
+
+
+```{rgamma,echo=FALSE}
+oms=FLStocks(mlply(run,function(x)
+               fwd(oms[[x]],catch=catch(oms[[x]])[,ac(1999:2008)],
+                      sr   =list(model ="bevholt",
+                                 params=FLPar(a=srpar[srpar[,".id"]==x,"a"],
+                                              b=srpar[srpar[,".id"]==x,"b"])),
+                      sr.residuals=srDev[[x]])))
+names(oms)=run
+plot(oms)+
+  kobe:::theme_ms(legend.position="bottom")+
+  ylab("Year")
+```
+
+**Figure 4** Time series of recruitment, SSB, catch and fishing mortality by scenario; values from 1999 are generated with gamma recruitment deviates sith mean and variance estimated by STARS, projected for observered catches.
+
+
+```{rcounterfactual,echo=FALSE}
+oms=FLStocks(mlply(run,function(x){
+               om=fwdWindow(oms[[x]],end=2050,eql[[x]])
+               fwd(om,
+                      f    =FLQuant(0.7*c(FLBRP:::refpts(eql[[x]])["msy","harvest"]),
+                                      dimnames=list(year=2009:2050)),
+                      sr   =list(model ="bevholt",
+                                 params=FLPar(a=srpar[srpar[,".id"]==x,"a"],
+                                              b=srpar[srpar[,".id"]==x,"b"])),
+                      sr.residuals=srDev[[x]])}))
+
+names(oms)=run
+save(oms,file="/home/laurie/MEGAsync/empirical/data/oms.RData")
+
+plot(oms)+
+  kobe:::theme_ms(legend.position="bottom")+
+  ylab("Year")
+```
+
+**Figure 5** Counterfactual time series of recruitment, SSB, catch and fishing mortality by scenario; values from 1999 are generated with gamma recruitment deviates sith mean and variance estimated by STARS, projected for observered catches up to 2008 and for F=70% of FMSY upto 2050.

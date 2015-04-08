@@ -1,0 +1,203 @@
+---
+title: "Evaluation of an Emprirical MP"
+subtitle: "MSE for SBT HCRs"
+author: "Laurence Kell"
+date: "21/03/2015"
+output: html_document
+---
+  
+```{r, echo=FALSE}
+library(knitr)
+
+opts_chunk$set(comment=NA, 
+               fig.width =8, 
+               fig.height=6,
+               fig.path  ="../tex/om",
+               warning=FALSE, 
+               message=FALSE, 
+               error  =FALSE, 
+               echo   =FALSE,
+               cache  =FALSE)
+```
+
+```{r}
+library(FLCore)
+library(kobe)
+library(diags)
+library(biodyn)
+library(FLBRP)
+library(ggplotFL)
+library(popbio)
+
+dirDat="/home/laurie/MEGAsync/empirical/data"
+dirMy ="/home/laurie/MEGAsync/empirical"
+
+load("/home/laurie/MEGAsync/empirical/data/oms.RData")
+load("/home/laurie/MEGAsync/empirical/data/eql.RData")
+load("/home/laurie/MEGAsync/empirical/data/srpar.RData")
+load("/home/laurie/MEGAsync/empirical/data/srDev.RData")
+
+run   =c("run52013","run142013","run152013","run5JP2013",
+         "run5new2013","run5westM2013","run5inflate2013")
+```
+
+```{r,eval=FALSE}
+library(doParallel)
+library(foreach)
+
+## set parallel stuff
+cl=makeCluster(4)
+registerDoParallel(cl)
+```
+
+```{r,eval=FALSE}
+sbt1=foreach(i=1:7, 
+            .combine     =FLStocks,
+            .multicombine=TRUE,
+            .maxcombine  =8,
+            .packages    =c("biodyn","FLash","FLBRP")) %dopar% {
+       
+            biodyn:::mseSBT1(oms[[i]],
+                      eql[[i]],
+                      srDev[[i]],
+                      start=2008,end=2050,
+                      k1=1.5,k2=3,gamma=1)}
+
+names(sbt1)=run
+
+save(sbt1,file="/home/laurie/MEGAsync/empirical/data/sbt1.RData")
+```
+
+```{r,eval=FALSE}
+yrAdult=1950:1980
+yrJuve =1999:2005
+
+sbt2=foreach(i=1:7, 
+             .combine     =FLStocks,
+             .multicombine=TRUE,
+             .maxcombine  =8,
+             .packages    =c("biodyn","FLash","FLBRP")) %dopar% {
+               
+             biodyn:::mseSBT2(oms[[i]],
+                       eql[[i]],
+                       srDev[[i]],
+                       yrAdult,yrJuve,
+                       start=2008,end=2050,
+                       tarCatch=30)}
+
+names(sbt2)=run
+
+save(sbt2,file="/home/laurie/MEGAsync/empirical/data/sbt2.RData")
+```
+
+
+```{r}
+load("/home/laurie/MEGAsync/empirical/data/sbt1.RData")
+load("/home/laurie/MEGAsync/empirical/data/sbt2.RData")
+
+res=rbind(cbind(HCR=factor(1),
+          ldply(sbt1,function(x) as.data.frame(x[["catch","fbar","rec","ssb","stock"]],drop=T))),
+          cbind(HCR=factor(2),
+          ldply(sbt2,function(x) as.data.frame(x[["catch","fbar","rec","ssb","stock"]],drop=T))))
+          
+res=transform(res,Quantity=factor(qname,labels=c("Yield","Fishing Mortality","Recruits","SSB","Biomass"),
+                                        levels=c("catch","fbar","rec","stock","ssb")))
+
+names(res)[2:3]=c("Scenario","Year")
+qtl=ddply(res,.(HCR,Scenario,Quantity,Year), with, quantile(data,prob=c(.25,.5,.75)))
+its=subset(res, iter %in% c(12,244,56,323,195,444))
+
+names(qtl)[5:7]=c("q25","q50","q75")
+```
+
+```{r}
+p1=ggplot(subset(qtl,Quantity!="Biomass"))+
+  geom_ribbon(aes(Year,y=q50,ymin=q25,ymax=q75,fill=HCR,group=HCR),alpha=.4)+
+  geom_line(  aes(Year,y=q50,col=HCR,group=HCR))+
+  facet_grid(Quantity~Scenario,scale="free")+
+  scale_x_continuous(limits=c(2010,2040))+
+  kobe:::theme_ms(6,legend.position="none")+ylab("")
+p1
+
+ggsave(filename=paste(dirMy,"/tex/ts.png",sep=""),p1,width=8,height=4,units="in")
+```
+
+**Figure 1** Time series of biomass
+
+```{r}
+p2=ggplot(subset(qtl,Quantity=="SSB"))+
+  geom_ribbon(aes(Year,y=q50,ymin=q25,ymax=q75,fill=HCR,group=HCR),alpha=.4)+
+  geom_line(aes(Year,y=q50,col=HCR,group=HCR))+
+  geom_line(aes(Year,data,col=iter,group=iter),data=subset(its,Quantity=="SSB"))+  
+  facet_grid(Scenario~HCR,scale="free")+
+  scale_x_continuous(limits=c(2010,2040))+theme_ms(8,legend.position="none")+ylab("")
+p2
+
+ggsave(filename=paste(dirMy,"/tex/iS.png",sep=""),p2,width=6,height=8,units="in")
+```
+
+**Figure 2** Time series of SSB
+
+
+```{r}
+p3=ggplot(subset(qtl,Quantity=="Biomass"))+
+  geom_ribbon(aes(Year,y=q50,ymin=q25,ymax=q75,fill=HCR,group=HCR),alpha=.4)+
+  geom_line(aes(Year,y=q50,col=HCR,group=HCR))+
+  geom_line(aes(Year,data,col=iter,group=iter),data=subset(its,Quantity=="Biomass"))+  
+  facet_grid(Scenario~HCR,scale="free")+
+  scale_x_continuous(limits=c(2010,2040))+
+  kobe:::theme_ms(8,legend.position="none")+ylab("")
+p3
+
+ggsave(filename=paste(dirMy,"/tex/iB.png",sep=""),p3,width=6,height=8,units="in")
+```
+
+**Figure 3** Time series of biomass
+
+
+```{r}
+p4=ggplot(subset(qtl,Quantity=="Recruits"))+
+  geom_ribbon(aes(Year,y=q50,ymin=q25,ymax=q75,fill=HCR,group=HCR),alpha=.4)+
+  geom_line(aes(Year,y=q50,col=HCR,group=HCR))+
+  geom_point(aes(Year,data,col=iter,group=iter),data=subset(its,Quantity=="Recruits"),size=1.0)+  
+  geom_line( aes(Year,data,col=iter,group=iter),data=subset(its,Quantity=="Recruits"),size=.1)+  
+  facet_grid(Scenario~HCR,scale="free")+
+  scale_x_continuous(limits=c(2010,2040))+
+  kobe:::theme_ms(8,legend.position="none")+ylab("")
+p4
+
+ggsave(filename=paste(dirMy,"/tex/iR.png",sep=""),p4,width=6,height=8,units="in")
+```
+
+**Figure 4** Time series of recruitment
+
+
+```{r}
+p5=ggplot(subset(qtl,Quantity=="Yield"))+
+  geom_ribbon(aes(Year,y=q50,ymin=q25,ymax=q75,fill=HCR,group=HCR),alpha=.4)+
+  geom_line(aes(Year,y=q50,col=HCR,group=HCR))+
+  geom_line(aes(Year,data,col=iter,group=iter),data=subset(its,Quantity=="Yield"))+  
+  facet_grid(Scenario~HCR,scale="free")+
+  scale_x_continuous(limits=c(2010,2040))+
+  kobe:::theme_ms(8,legend.position="none")+ylab("")
+p5
+
+ggsave(filename=paste(dirMy,"/tex/iY.png",sep=""),p5,width=6,height=8,units="in")
+```
+
+**Figure 5** Time series of yield
+
+```{r}
+p6=ggplot(subset(qtl,Quantity=="Fishing Mortality"))+
+  geom_ribbon(aes(Year,y=q50,ymin=q25,ymax=q75,fill=HCR,group=HCR),alpha=.4)+
+  geom_line(aes(Year,y=q50,col=HCR,group=HCR))+
+  geom_line(aes(Year,data,col=iter,group=iter),data=subset(its,Quantity=="Fishing Mortality"))+  
+  facet_grid(Scenario~HCR,scale="free")+
+  scale_x_continuous(limits=c(2010,2040))+
+  kobe:::theme_ms(8,legend.position="none")+ylab("")
+p6
+
+ggsave(filename=paste(dirMy,"/tex/iF.png",sep=""),p6,width=6,height=8,units="in")
+```
+
+**Figure 6** Time series of F
