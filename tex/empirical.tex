@@ -1,0 +1,537 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Typeset by                  , Research Press, NRC
+%% Date: 
+%% NRC, <name of journal>
+%% 
+%%%%%%%%%%%%%%
+%%
+%% 1. See original preamble material (at bottom of file) for
+%%    details on source of current .tex file: conversion
+%%    from word-processing program or author-generated TeX
+%%    code. 
+%%
+%% 2. This template includes most options and packages used by 
+%%    all the NRC journals. UNcomment those packages and options
+%%    which are REQUIRED. 
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% 1. Class file (nrc1 or nrc2) + options (see userguide, pp.1-2; p.9):
+\documentclass[%% french,        %% use with \usepackage[french]{babel}
+               %% leqno,         %% only for nrc1 (default is right eqno)
+               %% reqno,         %% only for nrc2 (default is left eqno)
+nonumbib,      %% biblio entries without nos.
+%
+               %% breakaddress,  %% linebreak btwn author(s) + address(es)
+               %% twocolid,      %% IDbox spans 2 cols
+               %% twocolid*,     %% 2-col IDbox
+               %% preprint,      %% removes identifying nos. from headers/footers
+               %% proof          %% `Proof/Epreuve' in footer
+               %% pagnf,         %% `Pagination not final/Pagination non finale'
+               %% trimmarks,     %% add trimmarks
+               %% finalverso,    %% final blank verso NOT included in pagerange
+]{nrc1}                          %% choose one: nrc1 or nrc2
+
+%% NOTE: authors may use the following options, which should be
+%%       DELETED once the file comes in-house:
+%%      
+%%       usecmfonts    type1rest     genTeX
+
+
+%% 2. Frequently used packages -- see pp.2-3 of userguide: 
+%%    a. graphics-related:
+\usepackage{graphicx}       %% color not usually needed
+\usepackage[figuresright]{rotating} %% for landscape tables
+
+%%    b. math-related: 
+\usepackage{amsmath}        %% math macros in wide use
+%%    \usepackage{amssymb}        %% additional math symbols
+%%    \usepackage{dcolumn}        %% decimal alignment for tables
+%%    \usepackage{bm}             %% `bold math' via \bm command
+
+%%    c. for website addresses:
+%%    \usepackage{url}            %% inserts linebreaks automatically
+%%    \NRCurl{url}
+
+%%    d. biblio-related:
+%\usepackage{cite}           %% enhances options for \cite commands
+\usepackage[authoryear, round]{natbib}
+
+%%    e. for English-language papers:
+\usepackage[french,english]{babel}  
+
+%%    f. for French-language papers: 
+%%    \usepackage[english,french]{babel}  %% remember to add french as a
+                                          %% CLASS option, above
+%%    g. for ragged-right tables:
+%%    \usepackage{array}
+%%    \newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+%%    \let\PBS=\PreserveBackslash
+
+%%    h. for left curly brace to span several lines of equations:
+%%    \usepackage{cases}
+%%    \expandafter\let\csname numc@left\expandafter\endcsname\csname 
+%%                 z@\endcsname
+
+
+%% 3. Resetting float parameters: 
+%%    a. in nrc1:
+%%    \renewcommand{\topfraction}{.95}
+%%    \renewcommand{\textfraction}{.05}
+%%    \renewcommand{\floatpagefraction}{.95}
+
+%%    b. in nrc2:
+%%    \renewcommand{\topfraction}{.95}
+%%    \renewcommand{\floatpagefraction}{.95}
+%%    \renewcommand{\dbltopfraction}{.95}
+%%    \renewcommand{\textfraction}{.05}
+%%    \renewcommand{\dblfloatpagefraction}{.95}
+
+
+%% 4. Resetting journal-specific parameters:
+%%    a. eqn nos. with section nos.:
+%%    \numberby {equation}{section}
+%%    \setcounter{equation}{0}
+
+%%    b. in-line citations to use ( ) instead of default [ ]:
+%%   \renewcommand{\citeleft}{(}
+%%   \renewcommand{\citeright}{)}
+
+%%    c. for JEES (to expand inter-line spacing; see p.12 of guide):
+%%    \easebaselines
+
+
+%% 5. Miscellaneous macros to always have available:
+%%    a. shorthands:
+\let\p=\phantom
+\let\mc=\multicolumn
+
+%%    b. struts for vertical spacing above/below rules in tables:
+%%%%%%%%%%%%%%%%%%  beginning of Claudio Beccari's code:
+%% Spacing commands for {tabular} (from TTN 2,3:10 -- Claudio
+%%                                                    Beccari): 
+%% Usage: a. use \T to put space below a line 
+%%           (e.g., at top of a `cell' of text)
+%%        b. use \B to put space above a line 
+%%           (e.g., at bottom of a `cell' of text)
+\newcommand\T{\rule{0pt}{2.6ex}}            % = `top' strut
+\newcommand\B{\rule[-1.2ex]{0pt}{0pt}}      % = `bottom' strut
+%%%%%%%%%%%%%%%%%%  end of Claudio's code 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   end of class and package 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   options, additional macros
+
+
+%% Journal-specific information for opening page -- pp.9-11 of guide:
+%% a. numbers:
+\setcounter{page}{1}             %% replace 1 with starting page no.
+\volyear{XX}{2001}               %% volume, year of journal 
+\journal{}                       %% jrnl. abbrev. (see App.A of guide)
+\journalcode{}                   %% jrnl. acro    (see App.A of guide)
+\filenumber{}                    %% NRC file number
+%% \filenumber*{}                %% prefixes \filenumber to all page nos.
+                                 %% NOTE: COMMENT OUT class options
+                                 %%             pagnf
+                                 %%             proof
+                                 %%       once no longer needed
+
+
+%% b. dates:
+\received{}                      %% insert date, no period
+\revreceived{}                   %% <same>
+\accepted{}                      %% <same>
+\revaccepted{}                   %% <same>
+%% \IDdates{}                       %% <same>. Use for `Revised ...' etc.
+%% \webpub{}                        %% insert date
+%% \commdate{}                      %% <same>
+
+
+%% c. miscellaneous:
+%%   \assoced{}                  %% insert name of Associate ed.
+%%   \corred{}                   %% insert name of Corresponding ed.
+%%   \dedication{}               %% insert text as neede
+%%   \abbreviations{}            %% insert as needed
+
+
+\newcommand{\mathgloss}[2]{
+ \newglossaryentry{#1}{name={#1},description={#2}}
+ \gls{#1} = #2
+}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\eps}{\epsilon}
+\newcommand{\veps}{\varepsilon}
+\newcommand{\wh}{\widehat}
+
+
+\begin{document}
+
+%% Reversed titlebar -- see p.11 of userguide:
+%% \specialtitle{}      %% for black stripe + text + regular title
+%% \specialtitle*{}     %% black stripe + text only
+
+
+
+
+%% Title, Author(s), Address(es) -- see p.4 of userguide for 
+%%    various options to save time and keyboarding, esp. where
+%%    authors share same address(s). 
+
+\title{Empirical Management Procedure for Mediterranean Bluefin Tuna}
+
+%% Author 1:
+\author{Laurence T. Kell}        
+\address{ICCAT Secretariat, C/Coraz\'{o}n de Mar\'{\i}a, 8. 28002 Madrid, Spain; ~Laurie.Kell@iccat.int; ~Phone: +34 914 165 600 ~Fax: +34 914 152 612.}
+        
+\author{Jean-Marc Fromentin}          
+\address{{IFREMER - UMR EME 212, Av. Jean Monnet, 34200 S\`ete, France.}}
+
+\shortauthor{Kell, et al.} %% for headers
+
+%%%%%%%%
+%% This line goes here in nrc1.
+%% \maketitle			
+%%%%%%%%
+
+
+%% Abstract/Resume area -- see pp.5,12 of userguide:
+\begin{abstract}
+
+
+\end{abstract}
+
+\begin{resume}
+\end{resume}
+
+\maketitle
+
+\section*{Introduction}
+
+An empirical HCR has been adopted for \gls{SBT} which sets the \gls{TAC}  using data solely from a fisheries dependent \gls{cpue} 
+index of adult abundance and a fisheries independent aerial survey of juveniles. The HCR is based on year-to-year changes and in the indices. Before the HCR can be implemented appropriate reference levels (e.g. based on historical catch, effort, CPUE and/or surveys) must be selected and the parameters tuned to meet management objectives using \gls{MSE}. The HCR is therefore evaluated as part of a \gls{MP}, i.e. the combination of pre-defined data, together with an algorithm to which the data are input to provide a value for a TAC or effort control measure.
+
+We first describe the empirical (i.e model free) HCRs used by CCSBT and then conduct an MSE for Atlantic bluefin
+tuna. 	
+
+\section*{Material and Methods}
+
+\subsection*{Case Study}
+
+Stock assessment methods are often classified on their information and data requirements \cite[e.g.][]{smith2005harvest, smith2008experience}. The highest information/data-rich tier uses catch-at-age and research surveys and the lowest tier is when only life history and limited fishery data are available. Advice for the majority of stocks assessed by the International Commission for the Conservation of Atlantic Tunas (ICCAT), the Regional Fisheries Management Organisation (RFMO) responsible for the management of tuna and tuna like species in the Atlantic and adjacent seas, is based on fisheries dependent data and catch biomass using biomass dynamic stock assessment models \cite[e.g.][]{prager1994suite, mcallister2000application}. 
+
+Although age based models are used by ICCAT assessment working groups, a lack of confidence in the quality of size and age data \citep{fromentin2014spectre} means that in most cases these models are not used to provide advice. However age based models could be used to develop hypotheses about stock dynamics. 
+
+Eight out of the ten commercial stocks that the SCRS provides ICCAT management advice on are assessed using biomass dynamic models. Even if MPs are not developed for these stocks MSE can be used to ensure that this advice is robust and that risks are managed.
+
+A stock may be defined on an ecological, evolutionary, or operational basis \citep{waples2006invited}. In this study we assume the later and that there is no immigration or emigration and that a stock is homogeneous.
+
+\subsection*{Management Strategy Evaluation}
+
+Conducting an MSE involves a number of steps, \cite[i.e. after][]{punt2007developing}
+
+\begin{enumerate}
+ \item Identification of management objectives and mapping these to performance measures in order to quantify how well they have been achieved;
+ \item Selection of hypotheses for the OMs;
+ \item Conditioning of the OMs using data and knowledge and possible rejection and weighting of hypotheses;
+ \item Identifying candidate management strategies and coding these as MPs, i.e.the combination of pre-defined data, together with an algorithm to which such data are input to set control measures;
+ \item Projecting the OMs forward using the MPs as a feedback controller, i.e.where information about the gap between the actual and reference levels is used to alter the gap in some way \citep{ramaprasad1983definition}; and
+ \item Agreeing the MP that best meets management objectives.
+\end{enumerate}
+
+\subsubsection*{Management Objectives} 
+
+The original management objective of ICCAT is to provide the maximum continuing catch \citep{iccat2007basictext}, interpreted as using maximum sustainable yield (MSY) as a target. However, the United Nations Conference On Straddling Fish Stocks and Highly Migratory Fish Stocks \cite[UNFSA][]{un1995straddling} now defines $F_{MSY}$ (fishing mortality  associated  with $MSY$) as an upper limit. ICCAT has recently asked the Standing Committee on Research and Statistics (SCRS) to define  biomass limit reference points for some stocks and work has started on evaluating HCRs \citep{iccat2007swgsm}.
+
+To help provide consistency of advice across the Tuna RFMOs a common management advice framework \cite[i.e. the Kobe Framework ][]{de2012precautionary} has been developed with a main objective of keeping stocks above $B_{MSY}$ and fishing below $F_{MSY}$. This requires management strategies to be reported with respect to the probabilities of maintaining the stock above $B_{MSY}$ and fishing mortality below $F_{MSY}$. Advice on stock status is normally given in the form of a phase plot (Figure %\ref{fig:hcr} 
+with a green quadrant corresponding to the  target region (i.e. where the stock is neither overfished ($B \geq B_{MSY}$) nor subject to overfishing ($F \leq F_{MSY}$).
+Management advice is determined upon which quadrant a stock falls into. If the stock is in the green quadrant the objective is to maintain the stock in this state with high probability. While if the stock is in the red quadrant then management measures should be adopted immediately taking into account the biology of the stock and scientific advice to result in a high probability of ending overfishing in as short a period as possible (REC-11-13).
+
+Although often not explicitly specified social and economic objectives need to be considered \citep{iccat2007swgsm}. These may include minimising variability in catch and/or effort since wide annual fluctuations in catch and effort limit the ability of the fishing industry to plan for the future \citep{kell2005flat, kell2005round}. There will also be trade-offs between objectives, e.g. reducing variability in catches may require effort to be low. While some objectives may take precedence over others since without sustainability there will be no catch. 
+
+Quantifying how well management objectives are achieved is done using performance statistics, which are used to report on probabilities, risk levels, time scales and the power of the scientific advice framework to estimate stock status and to predict management performance. We consider five objectives (Table 1) and performance measures (Table 2) i.e. i) probability of being in the green quadrant; ii) average catch:$MSY$; iii) average Effort:(Effort at $F_{MSY}$); iv) average inter-annual variation (AAV) in catches expressed relative to $MSY$; and v) average inter-annual variation in Effort relative to Effort at $F_{MSY}$.
+
+
+\subsection{Observation Error Model}
+
+An Observation Error Model (OEM) was constructed to generate two unbiased abundance indices corresponding to the adult biomass and numbers of recruits.
+A log normal random error of 30\% was added to these time series.
+
+All modelling was conducted in R \cite{R}
+
+
+\subsubsection*{Scenarios} 
+
+When providing traditional stock assessment advice important sources of uncertainty are often underestimated by experts \citep{morgan1990uncertainty},  i.e. model error which includes structural uncertainty due to inadequate models, incomplete or competing conceptual frameworks, or where significant processes or relationships are wrongly specified or not considered. Even if the form of a process is known, the parameters may not be (i.e. value uncertainty) due to missing or inaccurate data or poorly known parameters. In ICCAT stock assessments there is uncertainty about biological parameters such as growth, maturity and natural mortality while the lack of age data means that stock recruitment relationships can not be fitted reliably \citep{leach2014elicit}. Therefore to evaluate the risk due to uncertainty about stock dynamics we conditioned the OM on hypotheses from a literature review of North Atlantic albacore (\textit{Thunnus alalunga}) \citep{santiago2005integrated, santiago2004dinamica} and life history theory \citep{gislason2010does}. 
+
+Life history parameters have been described for many taxonomic groups and biological parameters are often strongly correlated \cite[e.g.][]{blueweiss1978relationships,gislason2010does}. This allows us to draw general conclusions about the impact of uncertainty about processes on the performance of the MP and associated risks. 
+
+For conditioning the OMs a factorial design was used with factors with 2 levels (Table 3); where the factors represent alternative hypotheses about biological processes, i.e. growth,  maturity, natural mortality and recruitment and targeting of age classes (i.e. relative fishing mortality-at-age). The different factors and levels could have been weighted based on how well they are supported by the available data or following discussion with stakeholders \citep{leach2014elicit}. However as in this study we are mainly concerned with identifying the factors that affect the performance of the MP the results and analyses are presented without weighting.
+ 
+For growth and maturity two hypotheses are considered based on \citep{santiago2005integrated,santiago2004dinamica} and life history theory \citep{gislason2010does}. While for natural mortality (M), a process about which there is considerable uncertainty \citep{hamel2014method}, two hypotheses concerning the mortality of older ages were considered related to the functional form (i.e.  \citep{lorenzen2002density} and \citep{chen1989age}). 
+
+The main form of density dependence assumed in most fishery models is based on the stock recruitment relationship, although other processes \cite[e.g. M,][]{powers2014age} could have been considered, where at high stock levels survival of recruits declines. However, it is difficult to actually estimate stock recruitment relationships for most stocks. \cite{szuwalski2014examining} showed that the environment may more strongly influence recruitment than spawning biomass over the observed stock sizes for many stocks. We therefore included hypothesis that recruitment exhibits long term fluctuations \citep[i.e. red noise][]{ravier2001longterm} nas well as those based on a S-R, i.e. Beverton and Holt or Cushing. 
+
+The Beverton and Holt stock recruitment relationship \citep{beverton1993dynamics} is derived from a simple density dependent mortality model where the more survivors there are the higher the mortality. It is assumed that the number of recruits (R) increases towards an asymptotic level ($R_{max}$) as egg production increases. In contrast \citep{cushing1973dependence} proposed a power-law SRR for stocks where resources are not locally limiting and recruitment continues to increase with increasing stock size, but at a decreasing rate. Stock recruitment relationships were reformulated in terms of steepness ($h$) and virgin biomass ($v$)  where steepness is the proportion of the expected recruitment produced at 20\% of virgin biomass relative to virgin recruitment  $(R_0)$. However, there is often insufficient information to allow its estimation from stock assessment\citep{issf2011steep} and so two values of steepness were assumed i.e. 0.7 and 0.9. Virgin biomass was set at 1000 Mt to allow comparisons to be made across scenarios.
+ 
+Uncertainty about the ages targeted by the fishery was modelled by changing the selection pattern, i.e. i) mature or juvenile, by  assuming the selection pattern is the same as the maturity ogive or the maturity ogive offset by 2 ages to the left; ii) flat topped or dome shaped selection. 
+
+%The stock was initially fished at 20\% of $F_{MSY}$ then over a period of x years fishing effort increased annually until it was fished at twice $F_{MSY}$ at which point a recovery plan was implemented. This plan reduced F to the $F_{Target}$ in 5 years (Figure \ref{fig:hcr}) after which a HCR was used.
+
+The OM was conditioned so that the stock was originally in the green quadrant of the Kobe Phase plot and then effort (and fishing mortality) increased annually until it ended up in the Red quadrant (Figure \ref{fig:hcr}). Shortly after entering the red quadrant a recovery plan was implemented to reduce F linearly to the target. The MP then started in year 55 after the 5 year recovery period. This follows the general pattern of exploitation seen in ICCAT stocks.
+
+
+\subsubsection*{Equations}
+
+Growth was modelled by the \cite{vonbert1957quantitative} growth equation i.e.
+ 
+\begin{equation} L_t = L_{\infty}(1 - e^{-kt-t_0}) \end{equation} 
+ 
+where $L_{\infty}$ is the asymptotic length attainable, $k$ the rate at which the rate of growth in length declines as length approaches
+$L_{\infty}$, and $t_{0}$ is the time at which an individual is of zero length. 
+ 
+Mass-at-age is then derived from length using a scaling exponent ($a$) and the condition factor ($b$)
+ 
+\begin{equation} W_t = a \times W_t^b \end{equation} 
+ 
+Maturity ($Q$) was either based on \cite{santiago2004dinamica}  or derived as in \cite{williams2003implications} 
+from the theoretical relationship between $M$, $K$, and age at maturity ($a_{Q}$)  
+based on the dimensionless ratio of length at maturity to asymptotic length \citep{beverton1992patterns}. It was then  
+modelled by the logistic equation with 2 parameters: age at 50\% ($a_{50}$) and 95\% ($a_{95}$) mature.
+
+\begin{equation}
+f(x) = \left\{ \begin{array}{ll}
+			0                                 &\mbox{ if $(a_{50}-x)/a_{95} >  5$} \\
+			a_{\infty}                        &\mbox{ if $(a_{50}-x)/a_{95} < -5$} \\
+			\frac{m_{\infty}}{1.0+19.0^{(a50-x)/{a95})}} &\mbox{ otherwise}
+		\end{array}
+       \right.
+\end{equation}
+
+Natural mortality ($M$) at-age was derived from \cite{lorenzen2002density} and \cite{chen1989age}, i.e.
+
+for Lorenzen
+ 
+\begin{equation}
+   M_t=3.00*W_t-0.288
+\end{equation}
+   
+   and Chen-Watanabe
+ 
+\begin{equation}
+M_t = \left\{ \begin{array}{ll}
+			 \frac{k}{1-e^{-k(t-t_0}}     			&\mbox{ for $t<t_m$} \\
+			\frac{k}{a_0}+a_1(t-t_m)+a_2(t-t_m)^2           &\mbox{ for $t<t_m$} \\
+		\end{array}
+       \right.
+\end{equation}
+
+where
+
+\begin{subequations}
+$a_0=1-e^{-k(t-t_0)}$  \\
+
+$a_1=ke^{-k(t-t_0)}$ \\  
+
+$a_2=-0.5k^{2e^{(-k(t-t_0))}}$ \\  
+
+$t_m=\frac{1}{k}log(1-e^{-kt_0}) +t_0$ \\
+\end{subequations} 
+ 
+Selectivity was modelled using a double normal \citep[see][]{hilborn2000documentation} with three parameters that describe the age at maximum selection ($a1$), the rate at which the left hand limb increases ($sl$) and the right hand limb decreases ($sr$) which allows flat topped or domed shaped selection patterns to be chosen.
+
+\begin{equation}
+f(x) = \left\{ \begin{array}{rl}
+ 2^{-[(x-a_1)/s_L]^2} &\mbox{ if $x<a_1$} \\
+ 2^{-[(x-a_1)/s_R]^2} &\mbox{ otherwise}
+       \end{array} \right.
+\end{equation}
+
+Stock recruitment relationships were either \citep{cushing1973dependence}
+\begin{equation} R=aS^b \end{equation}
+
+or Beverton and Holt \citep{beverton1993dynamics}
+
+\begin{equation} R=\frac{S}{a+bS} \end{equation}
+
+\subsubsection{Scenarios}
+
+The scenarios are given in \textbf{Table} \ref{tab:om}.
+
+\subsection{Management Procedure}
+
+The MPs are based on the model free HCR developed by CCSBT. The TAC is an average of candidate TACs obtained from two harvest control rules. Here we
+run the two HCRs separately in order to compare their performance \citep{hillary2013sbthcr}.
+
+\subsubsection{Harvest Control Rule I}
+
+The first HCR is based on a single index i.e.
+
+\begin{equation}
+            \ds TAC^1_{y+1}=TAC_y\times \left\{\begin{array}{rcl}\ds{1-k_1|\lambda|^{\gamma}} & \mbox{for} & \lambda<0\\[0.35cm]
+\ds{1+k_2\lambda} & \mbox{for} & \lambda\geq 0 
+    \end{array}\right.
+\end{equation}
+        
+
+ where $\lambda$ is the slope in the regression of $\ln B_y$ against year for the most recent $n$ years,  
+ $k_1$ and $k_2$ are \textit{gain} parameters.
+
+giving 4 tunable parameters (\textbf{Table} \ref{tab1})
+
+
+\subsubsection{Harvest Control Rule II}
+
+The second HCR uses both a biomass and a juvenile index i.e.
+
+\begin{equation} 
+ \begin{align*}
+ \ds TAC_{y+1} &= 0.5\times\left(TAC_y+C^{\rm targ}_y\Delta^R_y\right),\\
+ \end{align*}
+  \end{equation}
+
+and
+
+ \begin{equation}
+       \begin{align*}
+            \ds TAC^2_{y+1} &= 0.5\times\left(TAC_y+C^{\rm targ}_y\Delta^R_y\right),\\
+                \ds C^{\rm targ}_y &= \left\{\begin{array}{rcl}\ds{\delta \left[\frac{B_{y}}{B^*}\right]^{1-\veps_b}} & \mbox{for} & B_{y}\geq B^*\\[0.35cm]
+\ds{\delta \left[\frac{B_{y}}{B^*}\right]^{1+\veps_b}} & \mbox{for} & B_{y}<B^*
+    \end{array}\right.,\\
+\ds \Delta^R_y &= \left\{\begin{array}{rcl}\ds{\left[\frac{\bar{R}}{\mathcal{R}}\right]^{1-\veps_r}} & \mbox{for} & \bar{R}\geq\mathcal{R}\\[0.35cm]
+\ds{\left[\frac{\bar{R}}{\mathcal{R}}\right]^{1+\veps_r}} & \mbox{for} & \bar{R}<\mathcal{R}
+\end{array}\right.
+        \end{align*}
+  \end{equation}
+
+ where $\delta$ is the \textit{target} catch; $B^*$ the \textit{target} CPUE (i.e. the mean observed CPUE corresponding to some 
+ multiple of a biomass reference point such as $B_0$ or $M_{MSY}$) and 
+$\bar{R}$ is the average recent juvenile biomass i.e.
+
+\begin{equation}
+ \ds \bar{R}=\frac{1}{\tau_R}\sum\limits_{i=y-\tau_R+1}^{y}R_i,
+ \end{equation}
+
+ 
+$\mathcal{R}$ is a ``limit'' level derived from the mean recruitment over a reference period; \\
+while $\veps_\bullet\in[0,1]$ actions asymmetry so that increases in TAC do not occur at the same level as decreases.
+
+There are therefore 5 tunable parameters, \textbf{Table} \ref{tab2}
+
+In our example we use reference periods to set $\delta$ as well as $\mathcal{R}$. 
+
+The MP operates every three years, i.e. 
+
+\begin{enumerate}
+ \item In year $t$ historical data up to and including $t-1$ are sampled from the OM by the oem
+ \item These data are then used by the MP to set a quota for 3 years starting in years $t+1$. 
+ \item repeat step 1 for year $t+4$
+\end{enumerate}
+
+
+\subsubsection*{Simulation}
+
+
+\section*{Results}
+
+
+\section*{Discussion}
+
+
+\newpage
+\section*{Conclusions}
+
+
+\section{Acknowledgement}
+
+This study does not necessarily reflect the views of ICCAT and in no way anticipates the Commission's future policy in this area. 
+
+%\section*{References}
+\newpage\clearpage
+\bibliography{refs}
+\bibliographystyle{abbrvnat}
+%\bibliographystyle{cjfas}
+
+\newpage
+\section*{Tables}
+\clearpage
+\begin{table}
+\begin{center}
+\label{tab:datasumm}
+\begin{tabular}{|cccc|}
+\hline
+			& {\tiny Levels (N)} & {\tiny $\prod$ N} & {\tiny Values} \\ %& {\tiny Prior} & {\tiny Weighting}\\
+\hline\hline
+{\tiny SRR} 		& {\tiny 2} 	 & {\tiny   2}  & {\tiny  \textbf{Beverton and Holt}; Cushing}     \\%                    & {\tiny ?}    & {\tiny ?}\\
+{\tiny Steepness}	& {\tiny 2} 	 & {\tiny   4}  & {\tiny  \textbf{.9}; .75}                        \\%                    & {\tiny ?}    & {\tiny ?}\\
+{\tiny $M$} 		& {\tiny 2} 	 & {\tiny   8}  & {\tiny  \textbf{Lorezen}; Chen \& Watanabe} 	   \\%                    & {\tiny ?}    & {\tiny ?}\\
+{\tiny $Growth$} 	& {\tiny 2} 	 & {\tiny  16}  & {\tiny  \textbf{N. Atl. Life History}; Slower growth}\\%                    & {\tiny ?}    & {\tiny ?}\\
+{\tiny $Maturity$} 	& {\tiny 2} 	 & {\tiny  32}  & {\tiny  \textbf{N. Atl.}; Life History}      \\%                    & {\tiny ?}    & {\tiny ?}\\
+{\tiny Selectivity I}	& {\tiny 2} 	 & {\tiny  64}  & {\tiny  \textbf{as Mat}, domed}      		   \\%                    & {\tiny ?}    & {\tiny ?}\\
+{\tiny Selectivity II}	& {\tiny 2} 	 & {\tiny 128}  & {\tiny  \textbf{as Mat}, juvenile}   		   \\%                    & {\tiny ?}    & {\tiny ?}\\
+{\tiny Autocorrelation}	& {\tiny 2} 	 & {\tiny 256}  & {\tiny  \textbf{0}; 0.3}                        \\%                    & {\tiny ?}    & {\tiny ?}\\
+%{\tiny CPUE} 		& {\tiny 3} 	 & {\tiny 10}  & {\tiny  0.2;\textbf{0.3};0.4 }                   \\%                    & {\tiny ?}    & {\tiny ?}\\
+%{\tiny Catch} 		& {\tiny 3} 	 & {\tiny 12}  & {\tiny  0.2;\textbf{0.3};0.4}                    \\%                    & {\tiny ?}    & {\tiny ?}\\
+\hline
+\end{tabular}
+\end{center}
+\label{tab:grid}
+\caption{Operating Model Scenarios; Base Case values in bold.}  
+\end{table}
+
+
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{ l p{10cm} }
+    \hline
+    Rule & Definition \\
+    \hline 
+     O1   & Maintain the stock in the \emph{green kobe quadrant}\\
+     O2   & Achieve the maximum continuing catch \\
+     O3   & Maintain high employment \\
+     O4   & Stability of yield \\
+     O5   & Stability of effort \\
+     \hline
+    \end{tabular}
+  \end{center}
+  \label{tab:objectives}
+  \caption{Management Objectives}  
+\end{table}
+
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{ l p{10cm} }
+    \hline 
+    Statistic & Definition \\ 
+    \hline 
+    P1   & Probability of SSB $\geq$ $B_{_{MSY}}$ and F $\le$  $F_{_{MSY}}$ \\ 
+    P2   & Catch\\ 
+    P3   & Effort\\ 
+    P4   & AAV Catch  \\ 
+    P5   & AAV Effort  \\ 
+    \hline 
+    \end{tabular}
+  \end{center}
+  \label{tab:measures}
+  \caption{Performance Statistics}  
+\end{table}
+
+
+\newpage\clearpage
+\section*{Figures}
+
+\end{document}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=6in]{hcr.png}
+\caption{Harvest Control Rule (brown) plotted on a phase plot of harvest rate relative to $F_{MSY}$ and stock biomass relative to $B_{MSY}$;
+the light line is the simulated stock and the black line is the replacement line.}
+\label{fig:hcr}
+\end{figure*}
+
+
+\end{document}
+
